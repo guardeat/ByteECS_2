@@ -19,12 +19,6 @@ namespace Byte
 			check_shrink();
 		}
 
-		void erase()
-		{
-			std::vector<T, Allocator>::erase();
-			check_shrink();
-		}
-
 	private:
 		void check_shrink()
 		{
