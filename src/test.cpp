@@ -5,8 +5,6 @@
 using namespace Byte;
 using namespace Byte::ECS;
 
-//TODO: Test Pool::apply, Pool::applyWithID
-
 int main()
 {
 	constexpr size_t ENTITY_COUNT{ 1000000 };
