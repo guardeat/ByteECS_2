@@ -6,18 +6,10 @@
 namespace Byte
 {
 
-	class Logger
+	struct Logger
 	{
-	private:
-		Logger& instance()
-		{
-			static Logger logger;
-			return logger;
-		}
+		Logger() = delete;
 
-		Logger() = default;
-
-	public:
 		Logger(const Logger&) = delete;
 
 		Logger(Logger&&) = delete;
