@@ -1,9 +1,6 @@
 #ifndef BYTE_ECS_COMPONENT_H
 #define	BYTE_ECS_COMPONENT_H
 
-#include <memory>
-#include <vector>
-
 #include "typedefs.h"
 
 namespace Byte::ECS
