@@ -22,7 +22,7 @@ namespace Byte::ECS
 	private:
 		using Container = size_t[BITSET_COUNT];
 
-		Container data{ 0 };
+		Container _data{ 0 };
 
 	public:
 		Signature() = default;
@@ -30,7 +30,7 @@ namespace Byte::ECS
 		void set(ComponentID id)
 		{
 			size_t bitIndex{ id % BIT_COUNT };
-			data[id / BIT_COUNT] |= 1ULL << bitIndex;
+			_data[id / BIT_COUNT] |= 1ULL << bitIndex;
 		}
 
 		void set(ComponentID id, bool value)
@@ -38,24 +38,24 @@ namespace Byte::ECS
 			size_t bitIndex{ id % BIT_COUNT };
 			if (value)
 			{
-				data[id / BIT_COUNT] |= 1ULL << bitIndex;
+				_data[id / BIT_COUNT] |= 1ULL << bitIndex;
 			}
 			else
 			{
-				data[id / BIT_COUNT] &= ~(1ULL << bitIndex);
+				_data[id / BIT_COUNT] &= ~(1ULL << bitIndex);
 			}
 		}
 
 		bool test(ComponentID id) const
 		{
-			return (data[id / BIT_COUNT]) & (1ULL << (id % BIT_COUNT));
+			return (_data[id / BIT_COUNT]) & (1ULL << (id % BIT_COUNT));
 		}
 
 		bool include(const Signature& signature) const
 		{
 			for (size_t index{}; index < BITSET_COUNT; ++index)
 			{
-				if ((data[index] | signature.data[index]) != data[index])
+				if ((_data[index] | signature._data[index]) != _data[index])
 				{
 					return false;
 				}
@@ -67,7 +67,7 @@ namespace Byte::ECS
 		{
 			for (size_t index{}; index < BITSET_COUNT; ++index)
 			{
-				if ((data[index] & signature.data[index]) > 0)
+				if ((_data[index] & signature._data[index]) > 0)
 				{
 					return true;
 				}
@@ -79,7 +79,7 @@ namespace Byte::ECS
 		{
 			for (size_t index{}; index < BITSET_COUNT; ++index)
 			{
-				if (data[index] > 0)
+				if (_data[index] > 0)
 				{
 					return true;
 				}
@@ -92,16 +92,26 @@ namespace Byte::ECS
 			return !any();
 		}
 
+		Container& data()
+		{
+			return _data;
+		}
+
+		const Container& data() const
+		{
+			return _data;
+		}
+
 		void clear()
 		{
-			std::fill_n(data, BITSET_COUNT, 0);
+			std::fill_n(_data, BITSET_COUNT, 0);
 		}
 
 		bool operator==(const Signature& left) const
 		{
 			for (size_t index{}; index < BITSET_COUNT; ++index)
 			{
-				if (data[index] != left.data[index])
+				if (_data[index] != left._data[index])
 				{
 					return false;
 				}
@@ -134,9 +144,14 @@ namespace std
 	template<>
 	struct hash<Byte::ECS::Signature>
 	{
-		size_t operator()(const Byte::ECS::Signature& signature)const
+		size_t operator()(const Byte::ECS::Signature& signature) const
 		{
-			size_t result{ 0 };
+			size_t result{};
+
+			for (size_t i{}; i < signature.BITSET_COUNT; ++i)
+			{
+				result += signature.data()[i];
+			}
 
 			return result;
 		}
