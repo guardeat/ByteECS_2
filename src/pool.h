@@ -5,7 +5,6 @@
 #include <tuple>
 
 #include "cluster.h"
-#include "entity_container.h"
 #include "signature.h"
 #include "entity_group.h"
 #include "view.h"
