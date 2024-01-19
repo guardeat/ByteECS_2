@@ -51,6 +51,8 @@ namespace Byte::ECS
 			Cluster& cluster{ *entityContainer[source].cluster };
 			entityContainer[out].index = ClusterBridge::copy(cluster, cluster, out, entityContainer[source].index);
 			entityContainer[out].cluster = &cluster;
+
+			return out;
 		}
 
 		void destroy(EntityID id)
