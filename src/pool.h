@@ -59,7 +59,7 @@ namespace Byte::ECS
 			Cluster* cluster{ entityContainer[id].cluster };
 			if (cluster)
 			{
-				localDetach(*cluster, id);
+				_detach(*cluster, id);
 			}
 			entityContainer.erase(id);
 
@@ -98,14 +98,14 @@ namespace Byte::ECS
 			if (oldCluster)
 			{
 				ClusterBridge::carry(*oldCluster, *newCluster, id, entityContainer[id].index );
-				localDetach(*oldCluster, id);
+				_detach(*oldCluster, id);
 			}
 			else
 			{
 				newCluster->pushEntity(id);
 			}
 
-			localAttach<Type,Types...>(*newCluster, std::move(component), std::move(components)...);
+			_attach<Type,Types...>(*newCluster, std::move(component), std::move(components)...);
 
 			entityContainer[id].cluster = newCluster;
 			entityContainer[id].index = newCluster->size() - 1;
@@ -135,7 +135,7 @@ namespace Byte::ECS
 				}
 				ClusterBridge::carry(*oldCluster, *newCluster, id, entityContainer[id]);
 			}
-			localDetach(*oldCluster, id);
+			_detach(*oldCluster, id);
 		}
 
 		template<typename Type>
@@ -201,7 +201,7 @@ namespace Byte::ECS
 		}
 
 	private:
-		void localDetach(Cluster& cluster, EntityID id)
+		void _detach(Cluster& cluster, EntityID id)
 		{
 			size_t newIndex{ entityContainer[id].index };
 			EntityID changed{ cluster.remove(newIndex) };
@@ -213,7 +213,7 @@ namespace Byte::ECS
 		}
 
 		template<typename... Types>
-		void localAttach(Cluster& cluster, Types&&... components)
+		void _attach(Cluster& cluster, Types&&... components)
 		{
 			(cluster.push<Types>(std::move(components)),...);
 		}

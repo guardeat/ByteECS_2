@@ -14,7 +14,7 @@ namespace Byte::ECS
 
 			for (auto& pair : clusters)
 			{
-				if (pair.second.signature().include(signature) && !pair.second.empty())
+				if (pair.second.signature().includes(signature) && !pair.second.empty())
 				{
 					out.push_back(&pair.second);
 				}
@@ -29,7 +29,7 @@ namespace Byte::ECS
 
 			for (auto& cluster: clusters)
 			{
-				if (cluster->signature().include(signature) && !cluster->empty())
+				if (cluster->signature().includes(signature) && !cluster->empty())
 				{
 					out.push_back(cluster);
 				}
@@ -44,7 +44,7 @@ namespace Byte::ECS
 
 			for (auto& pair : clusters)
 			{
-				if (!pair.second.signature().match(signature) && !pair.second.empty())
+				if (!pair.second.signature().matches(signature) && !pair.second.empty())
 				{
 					out.push_back(&pair.second);
 				}
@@ -59,7 +59,7 @@ namespace Byte::ECS
 
 			for (auto& cluster : clusters)
 			{
-				if (!cluster->signature().match(signature) && !cluster->empty())
+				if (!cluster->signature().matches(signature) && !cluster->empty())
 				{
 					out.push_back(cluster);
 				}

@@ -95,25 +95,25 @@ namespace Byte::ECS
 		template<typename Type>
 		void push(Type&& item)
 		{
-			getAccessor<Type>().push(std::move(item));
+			accessor<Type>().push(std::move(item));
 		}
 
 		template<typename Type, typename... Args>
 		void emplace(Args&&... items)
 		{
-			getAccessor<Type>().emplace(std::move(items));
+			accessor<Type>().emplace(std::move(items));
 		}
 
 		template<typename Type>
 		Type& get(size_t index)
 		{
-			return getAccessor<Type>().at(index);
+			return accessor<Type>().at(index);
 		}
 
 		template<typename Type>
 		const Type& get(size_t index) const
 		{
-			return getAccessor<Type>().at(index);
+			return accessor<Type>().at(index);
 		}
 
 		size_t size() const
@@ -139,16 +139,16 @@ namespace Byte::ECS
 
 	private:
 		template<typename Type>
-		Accessor<Type>& getAccessor()
+		Accessor<Type>& accessor()
 		{
-			ComponentID id{ ComponentRegistry<Type>::getID() };
+			ComponentID id{ ComponentRegistry<Type>::id };
 			return static_cast<Accessor<Type>&>(*accessors.at(id));
 		}
 		
 		template<typename Type>
-		const Accessor<Type>& getAccessor() const
+		const Accessor<Type>& accessor() const
 		{
-			ComponentID id{ ComponentRegistry<Type>::getID() };
+			ComponentID id{ ComponentRegistry<Type>::id };
 			return static_cast<Accessor<Type>&>(*accessors.at(id));
 		}
 	};
@@ -159,7 +159,7 @@ namespace Byte::ECS
 		static Cluster build()
 		{
 			Cluster out{ SignatureBuilder<Types...>()};
-			(addAccessor<Types>(out), ...);
+			(add<Types>(out), ...);
 			return out;
 		}
 
@@ -171,10 +171,10 @@ namespace Byte::ECS
 
 			for (auto& pair : initial.accessors)
 			{
-				out.accessors[pair.first] = pair.second->copy();
+				out.accessors[pair.first] = pair.second->instance();
 			}
 
-			((addAccessor<Types>(out), out._signature.set(ComponentRegistry<Types>::getID())), ...);
+			((add<Types>(out), out._signature.set(ComponentRegistry<Types>::id)), ...);
 			return out;
 		}
 
@@ -182,14 +182,14 @@ namespace Byte::ECS
 		static Cluster buildWithout(const Cluster& initial)
 		{
 			Signature signature{ initial._signature };
-			signature.set(ComponentRegistry<Type>::getID(), false);
+			signature.set(ComponentRegistry<Type>::id, false);
 			Cluster out{ signature };
 
 			for (auto& pair : initial.accessors)
 			{
-				if (pair.first != ComponentRegistry<Type>::getID())
+				if (pair.first != ComponentRegistry<Type>::id)
 				{
-					out.accessors[pair.first] = pair.second->copy();
+					out.accessors[pair.first] = pair.second->instance();
 				}
 			}
 
@@ -198,9 +198,9 @@ namespace Byte::ECS
 
 	private:
 		template<typename Type>
-		static void addAccessor(Cluster& cluster)
+		static void add(Cluster& cluster)
 		{
-			cluster.accessors[ComponentRegistry<Type>::getID()] = std::make_unique<Accessor<Type>>();
+			cluster.accessors[ComponentRegistry<Type>::id] = std::make_unique<Accessor<Type>>();
 		}
 	};
 
@@ -259,18 +259,18 @@ namespace Byte::ECS
 		ClusterCache(Cluster& cluster)
 			:entities{ &cluster._entities }, accessorCount{ cluster.accessors.size() }
 		{
-			((accessors.push_back(cluster.accessors.at(ComponentRegistry<Types>::getID()).get())),...);
+			((accessors.push_back(cluster.accessors.at(ComponentRegistry<Types>::id).get())),...);
 		}
 
 		ClusterCache() = default;
 
-		IDComponentGroup  getIDGroup(size_t index)
+		IDComponentGroup groupWithID(size_t index)
 		{
 			size_t iterator{ accessorCount };
 			return IDComponentGroup(entities->at(index), get<Types>(index, --iterator)...);
 		}
 
-		ComponentGroup getGroup(size_t index)
+		ComponentGroup group(size_t index)
 		{
 			size_t iterator{ accessorCount };
 			return ComponentGroup(get<Types>(index, --iterator)...);

@@ -23,16 +23,9 @@ namespace Byte::ECS
 	};
 
 	template<typename Component>
-	class ComponentRegistry
+	struct ComponentRegistry
 	{	
-	private:
-		inline static const ComponentID ID{ ComponentIDGenerator::generate<Component>() };
-
-	public:
-		static ComponentID getID()
-		{
-			return ID;
-		}
+		inline static const ComponentID id{ ComponentIDGenerator::generate<Component>() };
 	};
 
 }

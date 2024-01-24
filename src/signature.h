@@ -51,7 +51,7 @@ namespace Byte::ECS
 			return (_data[id / BIT_COUNT]) & (1ULL << (id % BIT_COUNT));
 		}
 
-		bool include(const Signature& signature) const
+		bool includes(const Signature& signature) const
 		{
 			for (size_t index{}; index < BITSET_COUNT; ++index)
 			{
@@ -63,7 +63,7 @@ namespace Byte::ECS
 			return true;
 		}
 
-		bool match(const Signature& signature) const
+		bool matches(const Signature& signature) const
 		{
 			for (size_t index{}; index < BITSET_COUNT; ++index)
 			{
@@ -131,7 +131,7 @@ namespace Byte::ECS
 		operator Signature() const
 		{
 			Signature out;
-			(out.set(ComponentRegistry<Args>::getID()),...);
+			(out.set(ComponentRegistry<Args>::id),...);
 			return out;
 		}
 	};

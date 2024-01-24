@@ -60,7 +60,7 @@ namespace Byte::ECS
 
 		ComponentGroup operator*()
 		{
-			return this->cache.getGroup(this->index);
+			return this->cache.group(this->index);
 		}
 
 		ViewIterator& operator++()
@@ -132,7 +132,7 @@ namespace Byte::ECS
 
 		IDComponentGroup operator*()
 		{
-			return this->cache.getIDGroup(this->index);
+			return this->cache.groupWithID(this->index);
 		}
 
 		IDViewIterator& operator++()
