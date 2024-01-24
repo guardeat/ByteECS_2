@@ -8,7 +8,7 @@ namespace Byte::ECS
 {
 
 	template<typename... Types>
-	class ViewIteratorBase
+	class _ViewIterator
 	{
 	protected:
 		using Cache = ClusterCache<Types...>;
@@ -20,7 +20,7 @@ namespace Byte::ECS
 		size_t cacheIndex;
 
 	public:
-		ViewIteratorBase(size_t index, ClusterGroup& clusterGroup, size_t cacheIndex)
+		_ViewIterator(size_t index, ClusterGroup& clusterGroup, size_t cacheIndex)
 			:index{ index }, clusters{ &clusterGroup }, cacheIndex{ cacheIndex }
 		{
 			if (cacheIndex < clusters->size())
@@ -47,14 +47,14 @@ namespace Byte::ECS
 	};
 
 	template<typename... Types>
-	class ViewIterator : public ViewIteratorBase<Types...>
+	class ViewIterator : public _ViewIterator<Types...>
 	{
 	private:
 		using ComponentGroup = ComponentGroup<Types...>;
 
 	public:
 		ViewIterator(size_t index, ClusterGroup& clusterGroup, size_t cacheIndex)
-			:ViewIteratorBase<Types...>{ index, clusterGroup, cacheIndex }
+			:_ViewIterator<Types...>{ index, clusterGroup, cacheIndex }
 		{
 		}
 
@@ -119,14 +119,14 @@ namespace Byte::ECS
 	};
 
 	template<typename... Types>
-	class IDViewIterator: public ViewIteratorBase<Types...>
+	class IDViewIterator: public _ViewIterator<Types...>
 	{
 	private:
 		using IDComponentGroup = IDComponentGroup<Types...>;
 
 	public:
 		IDViewIterator(size_t index, ClusterGroup& clusterGroup, size_t cacheIndex)
-			:ViewIteratorBase<Types...>{index, clusterGroup, cacheIndex}
+			:_ViewIterator<Types...>{index, clusterGroup, cacheIndex}
 		{
 		}
 
