@@ -13,11 +13,10 @@ namespace Byte::ECS
 {
 	
 	template<typename Container>
-	struct ContainerTraitsBase
+	struct _ContainerTraits
 	{
+	public:
 		using Value = typename Container::value_type;
-		using Iterator = typename Container::iterator;
-		using ConstIterator = typename Container::const_iterator;
 
 	public:
 		static void push(Container& container, Value&& value)
@@ -73,7 +72,7 @@ namespace Byte::ECS
 	};
 
 	template<typename Container>
-	struct ContainerTraits: public ContainerTraitsBase<Container>
+	struct ContainerTraits: public _ContainerTraits<Container>
 	{
 	};
 
