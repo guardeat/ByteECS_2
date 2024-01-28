@@ -1,13 +1,13 @@
 #ifndef BYTE_ECS_CLUSTER_H
 #define BYTE_ECS_CLUSTER_H
 
+#include <unordered_map>
+#include <memory>
+
 #include "signature.h"
 #include "accessor.h"
 #include "shrink_vector.h"
 #include "component.h"
-
-#include <unordered_map>
-#include <memory>
 
 namespace Byte::ECS
 {
