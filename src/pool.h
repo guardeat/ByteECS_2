@@ -9,7 +9,8 @@
 #include "entity_group.h"
 #include "view.h"
 #include "typedefs.h"
-#include "sparse_vector.h"
+
+#include "Byte/Container/sparse_vector.h"
 
 namespace Byte::ECS
 {
@@ -198,6 +199,11 @@ namespace Byte::ECS
 			{
 				std::apply(callable,tuple);
 			}
+		}
+
+		bool contains(EntityID id) const
+		{
+			return entityContainer.test(id);
 		}
 
 	private:
