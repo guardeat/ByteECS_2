@@ -118,7 +118,7 @@ namespace Byte::ECS
 			Cluster* oldCluster{ entityContainer[id].cluster };
 
 			Signature signature{ oldCluster->signature() };
-			signature.set(ComponentRegistry<Type>::getID(), false);
+			signature.set(ComponentRegistry<Type>::id, false);
 
 			if (signature.any())
 			{
@@ -154,7 +154,7 @@ namespace Byte::ECS
 		template<typename Type>
 		bool has(EntityID id)
 		{
-			return entityContainer[id].cluster->signature().test(ComponentRegistry<Type>::getID());
+			return entityContainer[id].cluster->signature().test(ComponentRegistry<Type>::id);
 		}
 
 		void clear()
