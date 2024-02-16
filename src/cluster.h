@@ -6,8 +6,9 @@
 
 #include "signature.h"
 #include "accessor.h"
-#include "shrink_vector.h"
 #include "component.h"
+
+#include "Byte/Container/shrink_vector.h"
 
 namespace Byte::ECS
 {
@@ -159,7 +160,7 @@ namespace Byte::ECS
 		static Cluster build()
 		{
 			Cluster out{ SignatureBuilder<Types...>()};
-			(add<Types>(out), ...);
+			(push<Types>(out), ...);
 			return out;
 		}
 
@@ -174,7 +175,7 @@ namespace Byte::ECS
 				out.accessors[pair.first] = pair.second->instance();
 			}
 
-			((add<Types>(out), out._signature.set(ComponentRegistry<Types>::id)), ...);
+			((push<Types>(out), out._signature.set(ComponentRegistry<Types>::id)), ...);
 			return out;
 		}
 
@@ -198,7 +199,7 @@ namespace Byte::ECS
 
 	private:
 		template<typename Type>
-		static void add(Cluster& cluster)
+		static void push(Cluster& cluster)
 		{
 			cluster.accessors[ComponentRegistry<Type>::id] = std::make_unique<Accessor<Type>>();
 		}
@@ -253,11 +254,10 @@ namespace Byte::ECS
 	private:
 		AccessorCache accessors;
 		EntityIDContainer* entities{ nullptr };
-		size_t accessorCount{ 0 };
 
 	public:
 		ClusterCache(Cluster& cluster)
-			:entities{ &cluster._entities }, accessorCount{ cluster.accessors.size() }
+			:entities{ &cluster._entities }
 		{
 			((accessors.push_back(cluster.accessors.at(ComponentRegistry<Types>::id).get())),...);
 		}
@@ -266,13 +266,13 @@ namespace Byte::ECS
 
 		IDComponentGroup groupWithID(size_t index)
 		{
-			size_t iterator{ accessorCount };
+			size_t iterator{ accessors.size() };
 			return IDComponentGroup(entities->at(index), get<Types>(index, --iterator)...);
 		}
 
 		ComponentGroup group(size_t index)
 		{
-			size_t iterator{ accessorCount };
+			size_t iterator{ accessors.size() };
 			return ComponentGroup(get<Types>(index, --iterator)...);
 		}
 
