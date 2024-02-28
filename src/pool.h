@@ -134,7 +134,7 @@ namespace Byte::ECS
 				{
 					newCluster = &result->second;
 				}
-				ClusterBridge::carry(*oldCluster, *newCluster, id, entityContainer[id]);
+				ClusterBridge::carry(*oldCluster, *newCluster, id, entityContainer[id].index);
 			}
 			_detach(*oldCluster, id);
 		}
