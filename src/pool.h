@@ -152,7 +152,7 @@ namespace Byte::ECS
 		}
 
 		template<typename Type>
-		bool has(EntityID id)
+		bool has(EntityID id) const
 		{
 			return entityContainer[id].cluster->signature().test(ComponentRegistry<Type>::id);
 		}
