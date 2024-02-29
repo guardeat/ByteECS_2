@@ -380,7 +380,7 @@ namespace Byte
 
 		bool test(size_t index) const
 		{
-			return bitsets[index / 64].test(63 - index % 64);
+			return bitsets[index / 64].test(_BITSET_SIZE -1ULL - index % 64);
 		}
 
 	private:
