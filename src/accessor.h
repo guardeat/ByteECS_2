@@ -1,13 +1,13 @@
 #ifndef BYTE_ECS_ACCESSOR_H
 #define BYTE_ECS_ACCESSOR_H
 
-#include <memory>
-#include <vector>
-#include <algorithm>
-
 #include "component.h"
 #include "shrink_vector.h"
 #include "typedefs.h"
+
+#include <memory>
+#include <vector>
+#include <algorithm>
 
 namespace Byte::ECS
 {
